@@ -32,25 +32,37 @@ async function run() {
       .collection("products");
     const cartsCollection = client.db("blue-ray-glass-db").collection("carts");
     // ----------------------------------------------------------------------------------
-    // products api
-    // app.get("/products", async (req, res) => {
-    //   try {
-    //     const result = await productsCollection.find({}).toArray();
-    //     res.status(200).send(result);
-    //   } catch (error) {
-    //     console.error("Error retrieving items:", error);
-    //     res.status(500).send("An error occurred");
-    //   }
-    // });
     app.get("/products", async (req, res) => {
       try {
-        const result = await productsCollection.find({}).toArray();
+        const tab = req.query.tab;
+        let query = {}; // Empty query object to fetch all products
+        if (tab === "express") {
+          query = { shipment: tab };
+        } else if (tab === "regular") {
+          query = { shipment: tab };
+        }
+        console.log(tab);
+        const result = await productsCollection.find(query).toArray();
         res.status(200).send(result);
       } catch (error) {
         console.error("Error retrieving items:", error);
         res.status(500).send("An error occurred");
       }
     });
+
+
+    
+    app.post("/products", async (req, res) => {
+      try {
+        const result = await productsCollection.insertOne({});
+        res.status(200).send(result);
+      } catch (error) {
+        console.error("Error retrieving items:", error);
+        res.status(500).send("An error occurred");
+      }
+      console.log("insert");
+    });
+
     // --------------------------------------------------------------------
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
