@@ -30,7 +30,6 @@ async function run() {
     const productsCollection = client
       .db("blue-ray-glass-db")
       .collection("products");
-    const cartsCollection = client.db("blue-ray-glass-db").collection("carts");
     // ----------------------------------------------------------------------------------
     app.get("/products", async (req, res) => {
       try {
@@ -38,7 +37,7 @@ async function run() {
         const limit = parseInt(req.params.limit) || 10;
         const page = parseInt(req.params.page) || 1;
         const skip = (page - 1) * limit;
-        console.log({ limit, page, skip });
+        // console.log({ limit, page, skip });
 
         let query = {}; // Empty query object to fetch all products
         if (tab === "express") {
@@ -46,7 +45,7 @@ async function run() {
         } else if (tab === "regular") {
           query = { shipment: tab };
         }
-        console.log(tab);
+        // console.log(tab);
         const result = await productsCollection
           .find(query)
           .limit(limit)
@@ -57,17 +56,6 @@ async function run() {
         console.error("Error retrieving items:", error);
         res.status(500).send("An error occurred");
       }
-    });
-
-    app.post("/products", async (req, res) => {
-      try {
-        const result = await productsCollection.insertOne({});
-        res.status(200).send(result);
-      } catch (error) {
-        console.error("Error retrieving items:", error);
-        res.status(500).send("An error occurred");
-      }
-      console.log("insert");
     });
 
     // --------------------------------------------------------------------
@@ -86,3 +74,40 @@ async function run() {
   }
 }
 run().catch(console.dir);
+
+// const data = require("./products.json");
+
+// app.get("/products", async (req, res) => {
+//   try {
+//     // console.log(data);
+//     const tab = req.query.tab;
+//     const limit = parseInt(req.params.limit) || 10;
+//     const page = parseInt(req.params.page) || 1;
+//     const skip = (page - 1) * limit;
+//     // console.log({ limit, page, skip });
+
+//     let query = {}; // Empty query object to fetch all products
+//     if (tab === "express") {
+//       query = { shipment: tab };
+//     } else if (tab === "regular") {
+//       query = { shipment: tab };
+//     }
+//     // console.log(tab);
+//     const parseData = JSON.parse(data);
+//     const result = await parseData.find(query).limit(limit).skip(skip).toArray();
+//     res.status(200).send(result);
+//   } catch (error) {
+//     console.error("Error retrieving items:", error);
+//     res.status(500).send("An error occurred");
+//   }
+// });
+
+// app.get("/products", async (req, res) => {
+//   res.send(data);
+// });
+// app.get("/", async (req, res) => {
+//   res.send(`<h1>Server is Running...</h1>`);
+// });
+// app.listen(port, () => {
+//   console.log(`Example app listening on http://localhost:${port}`);
+// });
