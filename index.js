@@ -35,6 +35,11 @@ async function run() {
     app.get("/products", async (req, res) => {
       try {
         const tab = req.query.tab;
+        const limit = parseInt(req.params.limit) || 10;
+        const page = parseInt(req.params.page) || 1;
+        const skip = (page - 1) * limit;
+        console.log({ limit, page, skip });
+
         let query = {}; // Empty query object to fetch all products
         if (tab === "express") {
           query = { shipment: tab };
@@ -42,7 +47,11 @@ async function run() {
           query = { shipment: tab };
         }
         console.log(tab);
-        const result = await productsCollection.find(query).toArray();
+        const result = await productsCollection
+          .find(query)
+          .limit(limit)
+          .skip(skip)
+          .toArray();
         res.status(200).send(result);
       } catch (error) {
         console.error("Error retrieving items:", error);
@@ -50,8 +59,6 @@ async function run() {
       }
     });
 
-
-    
     app.post("/products", async (req, res) => {
       try {
         const result = await productsCollection.insertOne({});
