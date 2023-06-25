@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const port = process.env.PORT || 5000;
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   "mongodb+srv://masudrahmandev:kSjiT9ZwPYQTKszx@cluster0.iuh6vbb.mongodb.net/?retryWrites=true&w=majority";
 
@@ -79,6 +79,18 @@ async function run() {
       } catch (error) {
         console.error("Error retrieving products:", error);
         res.status(500).json({ message: "An error occurred" });
+      }
+    });
+    app.delete("/products/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        // console.log(id);
+        const query = { _id: new ObjectId(id) };
+        const result = await productsCollection.deleteOne(query);
+        res.status(200).json(result);
+      } catch (error) {
+        console.error("Error deleting product:", error);
+        res.status(500).json({ message: "Failed to delete product" });
       }
     });
 
