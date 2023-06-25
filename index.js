@@ -11,50 +11,65 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority`;
 
-const uri =
-  "mongodb+srv://masudrahmandev:8jGTWyRuSKXTH5ws@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority";
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
+// const uri =
+//   "mongodb+srv://masudrahmandev:8jGTWyRuSKXTH5ws@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority";
+// // Create a MongoClient with a MongoClientOptions object to set the Stable API version
+// const client = new MongoClient(uri, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: true,
+//     deprecationErrors: true,
+//   },
+// });
+// async function run() {
+//   try {
+//     client.connect();
+//     client.db("admin").command({ ping: 1 });
+//     const productsCollection = client
+//       .db("blue-ray-glass-db")
+//       .collection("products");
+
+//     app.get("/products", async (req, res) => {
+//       try {
+//         const result = await productsCollection.find().toArray();
+//         res.send(result);
+//       } catch (error) {
+//         res.send("An error occurred");
+//       }
+//     });
+
+//     app.get("/", async (req, res) => {
+//       res.send("<h1>Server is Running...</h1>");
+//     });
+
+//     app.listen(port, () => {
+//       console.log(`Example app listening on http://localhost:${port}`);
+//     });
+
+//     console.log(
+//       "Pinged your deployment. You successfully connected to MongoDB!"
+//     );
+//   } catch (error) {
+//     console.error("An error occurred:", error);
+//   }
+// }
+
+// run().catch(console.dir);
+
+// ######################################################
+// test code
+
+app.get("/products", (req, res) => {
+  res.send(`<h1>products route is Running...</h1>`);
 });
-async function run() {
-  try {
-    client.connect();
-    client.db("admin").command({ ping: 1 });
-    const productsCollection = client
-      .db("blue-ray-glass-db")
-      .collection("products");
 
-    app.get("/products", async (req, res) => {
-      try {
-        const result = await productsCollection.find().toArray();
-        res.send(result);
-      } catch (error) {
-        res.send("An error occurred");
-      }
-    });
+app.get("/", (req, res) => {
+  res.send(`<h1>Server is Running...</h1>`);
+});
 
-    app.get("/", async (req, res) => {
-      res.send("<h1>Server is Running...</h1>");
-    });
-
-    app.listen(port, () => {
-      console.log(`Example app listening on http://localhost:${port}`);
-    });
-
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } catch (error) {
-    console.error("An error occurred:", error);
-  }
-}
-
-run().catch(console.dir);
+app.listen(port, () => {
+  console.log(`Example app listening on http://localhost:${port}`);
+});
 
 // app.get("/products", async (req, res) => {
 //   try {
@@ -79,22 +94,4 @@ run().catch(console.dir);
 //     console.error("Error retrieving items:", error);
 //     res.status(500).send("An error occurred");
 //   }
-// });
-
-// app.get("/products", async (req, res) => {
-//   res.send(data);
-// });
-// app.get("/", async (req, res) => {
-//   res.send(`<h1>Server is Running...</h1>`);
-// });
-
-// app.get("/", async (req, res) => {
-//   res.send(`<h1>Server is Running...</h1>`);
-// });
-// app.get("/hello", async (req, res) => {
-//   res.send(`<h1>Hello...</h1>`);
-// });
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on http://localhost:${port}`);
 // });
