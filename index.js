@@ -9,8 +9,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority`;
+// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority`;
 
+const uri =
+  "mongodb+srv://masudrahmandev:8jGTWyRuSKXTH5ws@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority";
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
