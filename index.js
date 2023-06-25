@@ -3,15 +3,14 @@ const cors = require("cors");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const app = express();
-const port = 5000 || process.env.PORT;
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion } = require("mongodb");
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3cwhptm.mongodb.net/?retryWrites=true&w=majority`;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -19,63 +18,40 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     client.connect();
-    // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
-
     const productsCollection = client
       .db("blue-ray-glass-db")
       .collection("products");
-    // ----------------------------------------------------------------------------------
+
     app.get("/products", async (req, res) => {
       try {
-        const tab = req.query.tab;
-        const limit = parseInt(req.params.limit) || 10;
-        const page = parseInt(req.params.page) || 1;
-        const skip = (page - 1) * limit;
-        // console.log({ limit, page, skip });
-
-        let query = {}; // Empty query object to fetch all products
-        if (tab === "express") {
-          query = { shipment: tab };
-        } else if (tab === "regular") {
-          query = { shipment: tab };
-        }
-        // console.log(tab);
-        const result = await productsCollection
-          .find(query)
-          .limit(limit)
-          .skip(skip)
-          .toArray();
-        res.status(200).send(result);
+        const result = await productsCollection.find().toArray();
+        res.send(result);
       } catch (error) {
-        console.error("Error retrieving items:", error);
-        res.status(500).send("An error occurred");
+        res.send("An error occurred");
       }
     });
 
-    // --------------------------------------------------------------------
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    // await client.close();
     app.get("/", async (req, res) => {
-      res.send(`<h1>Server is Running...</h1>`);
+      res.send("<h1>Server is Running...</h1>");
     });
+
     app.listen(port, () => {
       console.log(`Example app listening on http://localhost:${port}`);
     });
+
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+  } catch (error) {
+    console.error("An error occurred:", error);
   }
 }
-run().catch(console.dir);
 
-// const data = require("./products.json");
+run().catch(console.dir);
 
 // app.get("/products", async (req, res) => {
 //   try {
@@ -108,6 +84,14 @@ run().catch(console.dir);
 // app.get("/", async (req, res) => {
 //   res.send(`<h1>Server is Running...</h1>`);
 // });
+
+// app.get("/", async (req, res) => {
+//   res.send(`<h1>Server is Running...</h1>`);
+// });
+// app.get("/hello", async (req, res) => {
+//   res.send(`<h1>Hello...</h1>`);
+// });
+
 // app.listen(port, () => {
 //   console.log(`Example app listening on http://localhost:${port}`);
 // });
